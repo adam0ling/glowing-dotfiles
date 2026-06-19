@@ -1,0 +1,24 @@
+#!/usr/bin/env zsh
+SESSION="tmux-$(basename "$PWD")"
+
+# Attach if session already exists
+tmux has-session -t $SESSION 2>/dev/null && tmux attach -t $SESSION && exit
+
+# Create session with first pane (copilot)
+tmux new-session -d -s $SESSION -x "$(tput cols)" -y "$(tput lines)"
+
+# Split right pane for copilot
+tmux split-window -h -t $SESSION
+
+# Size: left pane 65% (nvim), right pane 35% (copilot)
+tmux resize-pane -t $SESSION:1.1 -x "62%"
+
+# Left pane: open nvim with file explorer
+tmux send-keys -t $SESSION:1.1 "nvim ." Enter
+
+# Right pane: start copilot
+tmux send-keys -t $SESSION:1.2 "copilot" Enter
+tmux select-pane -t $SESSION:1.1
+
+# Attach
+tmux attach -t $SESSION
