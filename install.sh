@@ -48,6 +48,10 @@ backup_and_link "$DOTFILES_DIR/shell/.zshrc"              "$HOME/.zshrc"
 # ── neovim ────────────────────────────────────────────────────────────────────
 backup_and_link "$DOTFILES_DIR/nvim/.config/nvim"         "$HOME/.config/nvim"
 
+# ── cheatsheet ────────────────────────────────────────────────────────────────
+mkdir -p "$HOME/Documents"
+backup_and_link "$DOTFILES_DIR/docs/cheatsheet.md"        "$HOME/Documents/cheatsheet.md"
+
 # ── work script ───────────────────────────────────────────────────────────────
 mkdir -p "$HOME/.local/bin"
 backup_and_link "$DOTFILES_DIR/bin/work"                  "$HOME/.local/bin/work"
