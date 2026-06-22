@@ -1,8 +1,12 @@
 #!/usr/bin/env bash
-# Open files in the running "main" nvim instance (fixed socket).
+# Open files in the nvim instance for the current tmux session.
 # Falls back to launching a new nvim if the socket doesn't exist.
 
-SOCK="${NVIM_MAIN_SOCK:-/tmp/nvim-main.sock}"
+# Derive socket from tmux session name, or fall back to fixed name
+if [[ -n "$TMUX" ]]; then
+  TMUX_SESSION="$(tmux display-message -p '#S' 2>/dev/null)"
+fi
+SOCK="${NVIM_MAIN_SOCK:-/tmp/nvim-${TMUX_SESSION:-main}.sock}"
 
 if [[ -S "$SOCK" ]]; then
   nvim --server "$SOCK" --remote "${@:-.}"

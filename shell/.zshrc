@@ -126,11 +126,12 @@ alias cat='bat --paging=never'
 # delta for git diffs
 export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
-# Neovim remote — fixed socket for tmux pane workflow
-export NVIM_MAIN_SOCK="/tmp/nvim-main.sock"
+# Neovim remote — per-tmux-session socket
 export EDITOR="nvr"
 
-# Launch nvim registered to the fixed socket (use this instead of plain nvim)
+# Launch nvim registered to a per-tmux-session socket
 nv() {
-  nvim --listen "$NVIM_MAIN_SOCK" "$@"
+  local session="${TMUX:+$(tmux display-message -p '#S' 2>/dev/null)}"
+  local sock="/tmp/nvim-${session:-main}.sock"
+  nvim --listen "$sock" "$@"
 }
