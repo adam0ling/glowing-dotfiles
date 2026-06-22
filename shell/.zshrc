@@ -124,3 +124,4 @@ eval "$(zoxide init zsh)"
 alias cat='bat --paging=never'
 
 # delta for git diffs
+export PATH="$HOME/bin:$PATH"
