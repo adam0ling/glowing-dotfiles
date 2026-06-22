@@ -187,3 +187,29 @@ lazydocker
 | `fzf` | `Ctrl+R` / `Ctrl+T` | Fuzzy history / file search in shell |
 | `btop` | `btop` | System monitor TUI |
 | `lazygit` | `lazygit` or `<leader>lg` | Full TUI git client |
+
+---
+
+## Copilot CLI ↔ Nvim Integration
+
+Each `work` session registers nvim on a per-tmux-session socket so Copilot CLI
+can open files directly in your nvim window.
+
+**Start nvim (registers socket):**
+```bash
+nv .          # always use nv instead of nvim in work sessions
+```
+
+**Open a file in nvim from the CLI pane:**
+```bash
+nvr src/app.ts
+nvr src/app.ts src/utils.ts   # multiple files
+```
+
+**Global Copilot instructions** (auto-loaded by every agent):
+```
+~/.copilot/copilot-instructions.md
+```
+
+Socket path: `/tmp/nvim-<tmux-session-name>.sock`  
+If `nvr` reports "No nvim server" — restart nvim with `nv .`
