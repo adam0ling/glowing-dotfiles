@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Open files in the running "main" nvim instance (fixed socket).
+# Falls back to launching a new nvim if the socket doesn't exist.
+
+SOCK="${NVIM_MAIN_SOCK:-/tmp/nvim-main.sock}"
+
+if [[ -S "$SOCK" ]]; then
+  nvim --server "$SOCK" --remote "${@:-.}"
+else
+  echo "No nvim server at $SOCK — start nvim with 'nv' to register it." >&2
+  nvim "$@"
+fi
