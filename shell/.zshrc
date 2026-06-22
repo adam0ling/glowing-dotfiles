@@ -124,7 +124,7 @@ eval "$(zoxide init zsh)"
 alias cat='bat --paging=never'
 
 # delta for git diffs
-export PATH="$HOME/bin:$PATH"
+export PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
 # Neovim remote — fixed socket for tmux pane workflow
 export NVIM_MAIN_SOCK="/tmp/nvim-main.sock"

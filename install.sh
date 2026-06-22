@@ -52,10 +52,12 @@ backup_and_link "$DOTFILES_DIR/nvim/.config/nvim"         "$HOME/.config/nvim"
 mkdir -p "$HOME/Documents"
 backup_and_link "$DOTFILES_DIR/docs/cheatsheet.md"        "$HOME/Documents/cheatsheet.md"
 
-# ── work script ───────────────────────────────────────────────────────────────
+# ── bin scripts ───────────────────────────────────────────────────────────────
 mkdir -p "$HOME/.local/bin"
 backup_and_link "$DOTFILES_DIR/bin/work"                  "$HOME/.local/bin/work"
 chmod +x "$DOTFILES_DIR/bin/work"
+backup_and_link "$DOTFILES_DIR/bin/nvr"                   "$HOME/.local/bin/nvr"
+chmod +x "$DOTFILES_DIR/bin/nvr"
 
 echo ""
 ok "All done! Symlinks are in place."
