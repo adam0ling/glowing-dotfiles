@@ -59,6 +59,10 @@ chmod +x "$DOTFILES_DIR/bin/work"
 backup_and_link "$DOTFILES_DIR/bin/nvr"                   "$HOME/.local/bin/nvr"
 chmod +x "$DOTFILES_DIR/bin/nvr"
 
+# ── copilot ───────────────────────────────────────────────────────────────────
+mkdir -p "$HOME/.copilot"
+backup_and_link "$DOTFILES_DIR/copilot/copilot-instructions.md" "$HOME/.copilot/copilot-instructions.md"
+
 echo ""
 ok "All done! Symlinks are in place."
 
