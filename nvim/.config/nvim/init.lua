@@ -194,16 +194,28 @@ require("lazy").setup({
         bmap("n", "gr", vim.lsp.buf.references,      "Go to references")
         bmap("n", "gi", vim.lsp.buf.implementation,  "Go to implementation")
         bmap("n", "K",  vim.lsp.buf.hover,           "Hover docs")
-        vim.api.nvim_create_autocmd("CursorHold", {
-          buffer = bufnr,
-          callback = vim.lsp.buf.hover,
-        })
         bmap("n", "<leader>rn", vim.lsp.buf.rename,  "Rename symbol")
         bmap("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
       end
 
+      local venv_python = (function()
+        local venv = vim.fn.getcwd() .. "/.venv/bin/python"
+        if vim.fn.executable(venv) == 1 then return venv end
+        return vim.fn.exepath("python3") or vim.fn.exepath("python")
+      end)()
+
       vim.lsp.config('pyright',   { on_attach = on_attach, capabilities = capabilities, settings = {
-        python = { venvPath = ".", venv = ".venv" },
+        python = {
+          pythonPath = venv_python,
+          venvPath = ".", venv = ".venv",
+          analysis = {
+            reportUnknownVariableType  = "none",
+            reportUnknownMemberType    = "none",
+            reportUnknownParameterType = "none",
+            reportUnknownArgumentType  = "none",
+            reportUnknownLambdaType    = "none",
+          },
+        },
       }})
       vim.lsp.config('marksman',  { on_attach = on_attach, capabilities = capabilities })
       vim.lsp.enable({ 'pyright', 'marksman' })
@@ -380,6 +392,54 @@ require("lazy").setup({
     end,
   },
 
+  -- Word-under-cursor highlighting
+  {
+    "RRethy/vim-illuminate",
+    config = function()
+      require("illuminate").configure({
+        delay = 100,
+        under_cursor = true,
+      })
+    end,
+  },
+
+  -- Flash fast motion / jump
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    config = function()
+      require("flash").setup()
+    end,
+  },
+
+  -- Indent guides
+  {
+    "lukas-reineke/indent-blankline.nvim",
+    main = "ibl",
+    config = function()
+      require("ibl").setup({
+        indent = { char = "│" },
+        scope  = { enabled = true },
+      })
+    end,
+  },
+
+  -- Smart code folding (LSP + treesitter)
+  {
+    "kevinhwang91/nvim-ufo",
+    dependencies = { "kevinhwang91/promise-async" },
+    config = function()
+      vim.o.foldlevel     = 99
+      vim.o.foldlevelstart = 99
+      vim.o.foldenable    = true
+      require("ufo").setup({
+        provider_selector = function()
+          return { "treesitter", "indent" }
+        end,
+      })
+    end,
+  },
+
   -- Session persistence (auto-saves and restores on reopen)
   {
     "folke/persistence.nvim",
@@ -474,3 +534,13 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.linebreak = true
   end,
 })
+
+-- flash.nvim
+map({ "n", "x", "o" }, "s",     function() require("flash").jump() end,              "Flash jump")
+map({ "n", "x", "o" }, "S",     function() require("flash").treesitter() end,        "Flash treesitter")
+map("o",               "r",     function() require("flash").remote() end,             "Flash remote")
+map({ "x", "o" },     "R",     function() require("flash").treesitter_search() end,  "Flash treesitter search")
+
+-- ufo folding
+map("n", "zR", function() require("ufo").openAllFolds() end,  "Open all folds")
+map("n", "zM", function() require("ufo").closeAllFolds() end, "Close all folds")
