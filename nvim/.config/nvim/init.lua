@@ -38,7 +38,7 @@ require("lazy").setup({
     lazy = false, priority = 1000,
     config = function()
       require("catppuccin").setup({
-        flavour = "frappe",
+        flavour = "macchiato",
         transparent_background = true,
         integrations = {
           bufferline = true,
@@ -298,6 +298,22 @@ require("lazy").setup({
     end,
   },
 
+  -- Markdown preview in browser with Mermaid support
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreview", "MarkdownPreviewStop", "MarkdownPreviewToggle" },
+    ft = { "markdown" },
+    build = "cd app && npm install",
+    init = function()
+      vim.g.mkdp_browserfunc = "MkdpOpenBrowser"
+      vim.cmd([[
+        function! MkdpOpenBrowser(url)
+          call jobstart([expand("~/wsl-browser"), a:url])
+        endfunction
+      ]])
+    end,
+  },
+
   -- Autocompletion
   {
     "hrsh7th/nvim-cmp",
@@ -440,6 +456,26 @@ require("lazy").setup({
     end,
   },
 
+  -- CSV viewer (inline column alignment, no extra windows)
+  {
+    "hat0uma/csvview.nvim",
+    ft = { "csv", "tsv" },
+    init = function()
+      vim.filetype.add({ extension = { csv = "csv", tsv = "tsv" } })
+    end,
+    config = function()
+      require("csvview").setup({
+        view = { display_mode = "highlight" },
+      })
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = { "csv", "tsv" },
+        callback = function()
+          require("csvview").enable()
+        end,
+      })
+    end,
+  },
+
   -- Session persistence (auto-saves and restores on reopen)
   {
     "folke/persistence.nvim",
@@ -534,6 +570,9 @@ vim.api.nvim_create_autocmd("FileType", {
     vim.opt_local.linebreak = true
   end,
 })
+
+-- markdown-preview
+map("n", "<leader>mp", ":MarkdownPreviewToggle<CR>", "Toggle Markdown preview")
 
 -- flash.nvim
 map({ "n", "x", "o" }, "s",     function() require("flash").jump() end,              "Flash jump")
