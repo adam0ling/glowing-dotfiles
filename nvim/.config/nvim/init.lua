@@ -38,16 +38,8 @@ require("lazy").setup({
     lazy = false, priority = 1000,
     config = function()
       require("catppuccin").setup({
-        flavour = "macchiato",
+        flavour = "mocha",
         transparent_background = true,
-        integrations = {
-          bufferline = true,
-          neotree = true,
-          gitsigns = true,
-          treesitter = true,
-          telescope = { enabled = true },
-          mason = true,
-        },
         highlight_overrides = {
           all = function()
             return {
@@ -57,6 +49,7 @@ require("lazy").setup({
               NeoTreeNormalNC             = { bg = "NONE" },
               NeoTreeEndOfBuffer          = { bg = "NONE" },
               BufferLineFill              = { bg = "NONE" },
+              NeoTreeCursorLine           = { bg = "#313244", bold = true },
             }
           end,
         },
