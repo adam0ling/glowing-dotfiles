@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 # Fires a native Windows toast notification when tmux bell rings,
-# unless the bell came from the window currently being viewed.
-# Args: $1 = tmux session name, $2 = pane current path, $3 = window_active flag (all via tmux hook formats)
+# unless the bell's window is both active AND its session is currently
+# attached to a client (i.e. actually being viewed right now).
+# Args: $1 = tmux session name, $2 = pane current path, $3 = window_active flag,
+#       $4 = session_attached count (all via tmux hook formats)
 
 SESSION="${1:-tmux}"
 PANE_PATH="${2:-$PWD}"
 WINDOW_ACTIVE="${3:-0}"
+SESSION_ATTACHED="${4:-0}"
 DIR="$(basename "$PANE_PATH")"
 
-# Skip notification if the bell fired in the window that's currently displayed
-if [ "$WINDOW_ACTIVE" = "1" ]; then
+# Skip notification only if the window is active in its session AND that
+# session is currently attached to a client (i.e. you're actually looking at it).
+if [ "$WINDOW_ACTIVE" = "1" ] && [ "$SESSION_ATTACHED" != "0" ]; then
   exit 0
 fi
 
