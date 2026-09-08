@@ -13,8 +13,9 @@ if [ "$WINDOW_ACTIVE" = "1" ]; then
   exit 0
 fi
 
-TITLE="tmux bell — ${SESSION}"
-MSG="Directory: ${DIR}"
+TITLE="${DIR}"
+MSG="yo?! 🤖"
+ICON_PATH="C:\\Users\\ADOLNGV\\AppData\\Local\\tmux-notify\\robot.png"
 
 POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
 
@@ -29,6 +30,7 @@ POWERSHELL="/mnt/c/Windows/System32/WindowsPowerShell/v1.0/powershell.exe"
     <binding template=\"ToastGeneric\">
       <text>${TITLE}</text>
       <text>${MSG}</text>
+      <image placement=\"appLogoOverride\" hint-crop=\"circle\" src=\"${ICON_PATH}\"/>
     </binding>
   </visual>
 </toast>
