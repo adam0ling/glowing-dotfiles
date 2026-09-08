@@ -41,6 +41,9 @@ echo ""
 
 # ── tmux ──────────────────────────────────────────────────────────────────────
 backup_and_link "$DOTFILES_DIR/tmux/.tmux.conf"           "$HOME/.tmux.conf"
+mkdir -p "$HOME/.tmux/scripts"
+backup_and_link "$DOTFILES_DIR/tmux/scripts/tmux-bell-notify.sh" "$HOME/.tmux/scripts/tmux-bell-notify.sh"
+chmod +x "$DOTFILES_DIR/tmux/scripts/tmux-bell-notify.sh"
 
 # ── zsh ───────────────────────────────────────────────────────────────────────
 backup_and_link "$DOTFILES_DIR/shell/.zshrc"              "$HOME/.zshrc"
